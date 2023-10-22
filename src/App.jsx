@@ -1,14 +1,6 @@
 import { useState } from 'react'
-import {
-  BrowserRouter as Router,
-  Link,
-  Route,
-  Routes,
-  useMatch,
-  Navigate,
-  useParams,
-  useNavigate,
-} from 'react-router-dom'
+import { Link, Route, Routes, useMatch, useNavigate } from 'react-router-dom'
+import { useField } from './hooks'
 
 const Menu = () => {
   const padding = {
@@ -98,25 +90,24 @@ const Footer = () => (
 )
 
 const CreateNew = props => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
+  const content = useField('type')
+  const author = useField('type')
+  const info = useField('type')
   const navigate = useNavigate()
 
   const handleSubmit = e => {
     e.preventDefault()
     props.addNew({
-      content,
-      author,
-      info,
+      content: content.value ,
+      author: author.value ,
+      info: info.value ,
       votes: 0,
     })
     navigate('/')
-    props.handleNotification(`a new anecdote '${content}' create!`)
+    props.handleNotification(`a new anecdote '${content.value}' create!`)
     setTimeout(() => {
       props.handleNotification(null)
     }, 5000)
-    
   }
 
   return (
@@ -126,25 +117,25 @@ const CreateNew = props => {
         <div>
           content
           <input
-            name='content'
-            value={content}
-            onChange={e => setContent(e.target.value)}
+            name={content.type}
+            value={content.value}
+            onChange={content.onChange}
           />
         </div>
         <div>
           author
           <input
-            name='author'
-            value={author}
-            onChange={e => setAuthor(e.target.value)}
+            name={author.type}
+            value={author.value}
+            onChange={author.onChange}
           />
         </div>
         <div>
           url for more info
           <input
-            name='info'
-            value={info}
-            onChange={e => setInfo(e.target.value)}
+            name={info.type}
+            value={info.value}
+            onChange={info.onChange}
           />
         </div>
         <button>create</button>
